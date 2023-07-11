@@ -18,10 +18,11 @@ const useKeyPress = function (targetKey) {
   React.useEffect(() => {
     document.addEventListener("keydown", downHandler);
     document.addEventListener("keyup", upHandler);
-
+    // document.addEventListener("F9", handleCompile);
     return () => {
       document.removeEventListener("keydown", downHandler);
       document.removeEventListener("keyup", upHandler);
+      // document.addEventListener("F9", handleCompile);
     };
   });
 

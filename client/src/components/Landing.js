@@ -16,7 +16,10 @@ import CustomInput from "./CustomInput";
 import OutputDetails from "./OutputDetails";
 import ThemeDropdown from "./ThemeDropdown";
 import LanguagesDropdown from "./LanguagesDropdown";
-
+import { logoutOption } from "../constants/logoutOptions";
+import LogoutDropdown from "./LogoutDropdown";
+import { settingOptions } from './../constants/settingOption';
+import SettingDropdown from './SettingDropdown';
 // const javascriptDefault = `
 
 // `;
@@ -27,18 +30,13 @@ const Landing = () => {
     const [processing, setProcessing] = useState(null);
     const [theme, setTheme] = useState("cobalt");
     const [language, setLanguage] = useState(languageOptions[0]);
+    const [logout, setLogout] = useState(logoutOption[0]);
+    // console.log("language", language);
     let defaultCode = `#include <iostream>
     int main() {
         std::cout << "hello, world" << std::endl;
         return 0;
     }`;
-    const getlanFun = () => {
-        console.log("called");
-        const getlan = localStorage.getItem("lan-snpt");
-        console.log("getlan", getlan);
-        defaultCode = `${getlan}`;
-        console.log("defaultCode", defaultCode);
-    }
     const [code, setCode] = useState(defaultCode);
     const enterPress = useKeyPress("Enter");
     const ctrlPress = useKeyPress("Control");
@@ -49,13 +47,33 @@ const Landing = () => {
         }
     })
     const onSelectChange = (sl) => {
-        const slan = sl;
-        localStorage.setItem("lan-snpt", sl.snippet);
-        getlanFun();
-        console.log("selected Option...", sl.snippet);
+        console.log("sl", sl);
         setLanguage(sl);
     };
-
+    const onLogoutChange = (lo) => {
+        setLogout(lo);
+        if (lo.id == 1)
+            window.location.href = "https://github.com/Sibasisbadatya/Compilex.git"
+        if (lo.id == 2)
+            window.location.href = "https://mail.google.com/mail/u/0/#inbox"
+        if (lo.id == 3)
+            window.location.href = "https://mail.google.com/mail/u/0/#inbox"
+        if (lo.id == 4)
+            window.location.href = "https://github.com/Sibasisbadatya"
+        if (lo.id == 5) {
+            localStorage.clear();
+            window.location.href = "./";
+        }
+    };
+    const onSettingChange = (lo) => {
+        setLogout(lo);
+        if (lo.id == 1)
+            window.location.href = "./";
+        if (lo.id == 2)
+            window.location.href = "./";
+        if (lo.id == 3)
+            window.location.href = "./";
+    };
     useEffect(() => {
         if (enterPress && ctrlPress) {
             console.log("enterPress", enterPress);
@@ -116,14 +134,6 @@ const Landing = () => {
                 setProcessing(false);
                 console.log("catch block...", error);
             });
-        // const sendOptions = {
-        //     method: "POST",
-        //     url: `${sendRoute}`,
-        //     headers: {
-        //         "Content-Type": "application/json",
-        //     },
-        //     data: formData,
-        // };
     };
 
     const checkStatus = async (token) => {
@@ -222,9 +232,12 @@ const Landing = () => {
 
 
             <div className="h-4 w-full bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500"></div>
-            <div className="d-flex flex-row bd-highlight mb-3" style={{ display: "flex" }}>
+            <div className="d-flex flex-row bd-highlight mb-3" style={{ display: "flex", justifyContent: "space-between",backgroundColor:"#3d3d3d" }}>
                 <div style={{ margin: "0.5rem 3rem" }}>
                     <LanguagesDropdown onSelectChange={onSelectChange} />
+                </div>
+                <div style={{ margin: "0.5rem 3rem" }}>
+                    <SettingDropdown onSettingChange={onSettingChange} />
                 </div>
                 <div style={{ margin: "0.5rem 3rem" }}>
                     <ThemeDropdown handleThemeChange={handleThemeChange} theme={theme} />
@@ -254,26 +267,8 @@ const Landing = () => {
                         {processing ? "Processing..." : "Run"}
                     </button>
                 </div>
-                <div>
-                    <button
-                        onClick={() => {
-                            localStorage.clear();
-                            window.location.href = "./";
-                        }}
-                        style={{
-                            backgroundColor: "#fff",
-                            maxWidth: "14rem",
-                            width: "8rem",
-                            border: "2px solid #000000",
-                            height: "3rem",
-                            borderRadius: "5px",
-                            marginLeft: "10px",
-                            marginTop: "8px",
-                            backgroundColor: "#d63031",
-                            boxShadow: "5px 5px 0px 0px rgba(0,0,0);",
-                            cursor: "pointer",
-                            marginLeft: "50rem",
-                        }}>Logout</button>
+                <div style={{ margin: "0.5rem 3rem" }}>
+                    <LogoutDropdown onSettingChange={onSettingChange} />
                 </div>
             </div>
             <div className="flex flex-row space-x-4 items-start px-4 py-4">
@@ -283,6 +278,8 @@ const Landing = () => {
                         onChange={onChange}
                         language={language?.value}
                         theme={theme.value}
+                        handleCompile={handleCompile}
+                    // logout={logout.label}
                     />
                 </div>
 
