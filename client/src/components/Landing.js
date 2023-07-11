@@ -268,7 +268,7 @@ const Landing = () => {
                     </button>
                 </div>
                 <div style={{ margin: "0.5rem 3rem" }}>
-                    <LogoutDropdown onSettingChange={onSettingChange} />
+                    <LogoutDropdown onLogoutChange={onLogoutChange} />
                 </div>
             </div>
             <div className="flex flex-row space-x-4 items-start px-4 py-4">
